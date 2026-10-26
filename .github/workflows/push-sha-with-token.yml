@@ -1,0 +1,22 @@
+# Moves a branch to an existing commit using this repository's GITHUB_TOKEN.
+name: push-sha-with-token
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        required: true
+      branch:
+        required: true
+permissions:
+  contents: write
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - env:
+          SHA: ${{ inputs.sha }}
+          BRANCH: ${{ inputs.branch }}
+        run: git push origin "$SHA:refs/heads/$BRANCH"
